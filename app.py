@@ -6,65 +6,68 @@ import time
 # 1. Page Configuration
 st.set_page_config(page_title="Taxi Fare Predictor", page_icon="🚕", layout="centered")
 
-# 2. Injecting Custom "Punchy" UI Styling via CSS
+# 2. Injecting Custom White Light-Mode UI Styling via CSS
 st.markdown("""
     <style>
-        /* Main background and global text color tweaks */
+        /* Force light theme, white background, and dark text */
         .stApp {
-            background-color: #0d0f12;
-            color: #e2e8f0;
+            background-color: #ffffff !important;
+            color: #1e293b !important;
         }
         
-        /* Main Title styling */
+        /* Tighten global top padding to prevent scrolling */
+        .block-container {
+            padding-top: 2rem !important;
+            padding-bottom: 1rem !important;
+        }
+        
+        /* Main Title styling - smaller and cleaner */
         .main-title {
-            font-size: 2.8rem !important;
+            font-size: 2.2rem !important;
             font-weight: 800 !important;
-            background: linear-gradient(135deg, #ffbd03 0%, #ff6b00 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem !important;
+            text-align: center;
         }
         
-        /* Sub-tagline styling */
-        .tagline {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        
-        /* Custom card wrapper for input & results */
+        /* Premium Card styling for light mode */
         .premium-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         
-        /* Large high-impact metric display */
+        /* Compact light-mode high-impact metric display */
         .metric-container {
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 189, 3, 0.1) 0%, rgba(255, 107, 0, 0.1) 100%);
-            border: 1px solid rgba(255, 189, 3, 0.3);
-            border-radius: 12px;
-            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
         }
         .metric-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #ffbd03;
+            letter-spacing: 1px;
+            color: #b45309;
             font-weight: 700;
         }
         .metric-value {
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: #ffffff;
-            margin: 5px 0;
-            text-shadow: 0 0 15px rgba(255, 189, 3, 0.3);
+            color: #1e293b;
+            margin: 2px 0;
+        }
+        
+        /* Fix label contrast for light mode text inside standard components */
+        label, .stSlider, p, span {
+            color: #1e293b !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -80,12 +83,10 @@ except FileNotFoundError:
     st.error("⚠️ Error: 'ransac_taxi_model.pkl' not found.")
     st.stop()
 
-# 4. Header Section (Using custom CSS classes)
+# 4. Header Section (Clean title with no tagline)
 st.markdown('<h1 class="main-title">🚕 Outlier-Resistant Fare Predictor</h1>', unsafe_allow_html=True)
-st.markdown('<p class="tagline">An intelligent taxi fare engine backed by RANSAC regression—engineered to automatically strip away historical traffic anomalies, surge glitches, and data spikes.</p>', unsafe_allow_html=True)
 
 # 5. Interactive Form Card
-# Open the styled card wrapper
 st.markdown('<div class="premium-card">', unsafe_allow_html=True)
 st.markdown("### 📋 Configure Your Journey")
 
@@ -98,28 +99,23 @@ trip_distance = st.slider(
     help="Drag to adjust the target distance for fare estimation."
 )
 
-# Crucial: Define the variable globally on the root page
 calculate_btn = st.button("Calculate Predicted Fare →", type="primary", use_container_width=True)
-
-# Close the styled card wrapper
 st.markdown('</div>', unsafe_allow_html=True)
 
 
 # 6. Live Prediction & High-Impact Output Area
 if calculate_btn:
-    with st.spinner("Filtering anomalies & computing fare..."):
-        time.sleep(0.4) 
+    with st.spinner("Computing robust fare..."):
+        time.sleep(0.3) # Snappy but functional feel
         
         input_data = np.array([[trip_distance]])
         prediction = model.predict(input_data)
         
-        # Convert prediction to an array, flatten it, and pull the first item safely
         pred_array = np.asarray(prediction).flatten()
-        
         if pred_array.size > 0:
             fare_value = float(pred_array[0])
         else:
-            fare_value = 0.0  # Fallback if empty
+            fare_value = 0.0
     
     # Custom high-impact results widget
     st.markdown(f"""
@@ -130,6 +126,3 @@ if calculate_btn:
     """, unsafe_allow_html=True)
     
     st.toast("✨ Fare successfully computed!", icon="✅")
-    
-    st.markdown("")
-    st.caption("ℹ️ **Anomaly Filter Active:** This specific estimation filters out structural pricing spikes caused by extreme weather, sudden airport gridlocks, or historical GPS telemetry tracking errors.")
