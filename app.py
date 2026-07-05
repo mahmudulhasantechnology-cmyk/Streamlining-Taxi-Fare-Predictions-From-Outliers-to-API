@@ -34,6 +34,9 @@ if st.button("Calculate Predicted Fare", type="primary"):
     # Run the model
     prediction = model.predict(input_data)
     
+    # Extract the raw number out of the array safely to fix the TypeError
+    fare_value = float(prediction[0])
+    
     # Display the final output safely formatted as currency
-    st.success(f"### Calculated Fare Estimate: **${prediction[0]:.2f}**")
+    st.success(f"### Calculated Fare Estimate: **${fare_value:.2f}**")
     st.caption("ℹ️ Note: This estimation filters out data spikes caused by unusual peak-hour traffic jams or bad GPS tracking glitches.")
