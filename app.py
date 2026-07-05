@@ -32,16 +32,6 @@ st.markdown("""
             text-align: center;
         }
         
-        /* Premium Card styling for light mode */
-        .premium-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        
         /* Compact light-mode high-impact metric display */
         .metric-container {
             text-align: center;
@@ -49,7 +39,7 @@ st.markdown("""
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
             border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .metric-label {
             font-size: 0.85rem;
@@ -86,27 +76,26 @@ except FileNotFoundError:
 # 4. Header Section (Clean title with no tagline)
 st.markdown('<h1 class="main-title">🚕 Outlier-Resistant Fare Predictor</h1>', unsafe_allow_html=True)
 
-# 5. Interactive Form Card
-st.markdown('<div class="premium-card">', unsafe_allow_html=True)
-st.markdown("### 📋 Configure Your Journey")
-
-trip_distance = st.slider(
-    "Select Trip Distance (in miles):", 
-    min_value=0.1, 
-    max_value=50.0, 
-    value=2.5, 
-    step=0.1,
-    help="Drag to adjust the target distance for fare estimation."
-)
-
-calculate_btn = st.button("Calculate Predicted Fare →", type="primary", use_container_width=True)
-st.markdown('</div>', unsafe_allow_html=True)
+# 5. Interactive Form Card (Using native components to fix the blank box bug)
+with st.container(border=True):
+    st.markdown("### 📋 Configure Your Journey")
+    
+    trip_distance = st.slider(
+        "Select Trip Distance (in miles):", 
+        min_value=0.1, 
+        max_value=50.0, 
+        value=2.5, 
+        step=0.1,
+        help="Drag to adjust the target distance for fare estimation."
+    )
+    
+    calculate_btn = st.button("Calculate Predicted Fare →", type="primary", use_container_width=True)
 
 
 # 6. Live Prediction & High-Impact Output Area
 if calculate_btn:
     with st.spinner("Computing robust fare..."):
-        time.sleep(0.3) # Snappy but functional feel
+        time.sleep(0.3) 
         
         input_data = np.array([[trip_distance]])
         prediction = model.predict(input_data)
