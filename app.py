@@ -34,8 +34,8 @@ if st.button("Calculate Predicted Fare", type="primary"):
     # Run the model
     prediction = model.predict(input_data)
     
-    # Extract the raw number out of the array safely to fix the TypeError
-    fare_value = float(prediction[0])
+    # Safely flatten and extract the float value to prevent TypeErrors
+    fare_value = float(np.ravel(prediction)[0])
     
     # Display the final output safely formatted as currency
     st.success(f"### Calculated Fare Estimate: **${fare_value:.2f}**")
