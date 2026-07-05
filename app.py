@@ -32,6 +32,22 @@ st.markdown("""
             text-align: center;
         }
         
+        /* Custom High-Conversion "Growth Green" Primary Button Styling */
+        div.stButton > button[kind="primary"] {
+            background-color: #10b981 !important;
+            color: #ffffff !important;
+            border: none !important;
+            font-weight: 700 !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        /* Smooth hover state for the action button */
+        div.stButton > button[kind="primary"]:hover {
+            background-color: #059669 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+        }
+        
         /* Compact light-mode high-impact metric display */
         .metric-container {
             text-align: center;
